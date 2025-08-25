@@ -1,0 +1,79 @@
+nodes:
+  - id: doc_loader
+    component: PDFLoader
+    outputs:
+      docs: list[Document]
+  - id: splitter
+    component: TextSplitter
+    inputs:
+      docs: list[Document]
+    outputs:
+      chunks: list[TextChunk]
+    params:
+      chunk_size: 80
+      overlap: 10
+  - id: index
+    component: BM25Index
+    inputs:
+      docs: list[TextChunk]
+    outputs:
+      index: BM25Index
+  - id: query
+    component: InputQuery
+    outputs:
+      query: text
+  - id: retriever
+    component: BM25Retriever
+    inputs:
+      query: text
+      index: BM25Index
+    outputs:
+      hits: list[TextChunk]
+    params:
+      top_k: 3
+  - id: reader
+    component: LLMReader
+    inputs:
+      question: text
+      context: list[TextChunk]
+    outputs:
+      answer: text
+  - id: print_answer
+    component: ConsolePrinter
+    inputs:
+      item: text
+    outputs: {}
+
+edges:
+  - source: doc_loader
+    source_output: docs
+    target: splitter
+    target_input: docs
+  - source: splitter
+    source_output: chunks
+    target: index
+    target_input: docs
+  - source: query
+    source_output: query
+    target: retriever
+    target_input: query
+  - source: index
+    source_output: index
+    target: retriever
+    target_input: index
+  - source: retriever
+    source_output: hits
+    target: reader
+    target_input: context
+  - source: query
+    source_output: query
+    target: reader
+    target_input: question
+  - source: reader
+    source_output: answer
+    target: print_answer
+    target_input: item
+
+metadata:
+  task: rag
+  description: Template RAG pipeline with BM25

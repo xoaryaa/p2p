@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prompt2pipes"
+version = "0.2.0"
+description = "Natural-language to NLP pipelines CLI (Haystack + spaCy)"
+authors = [{name = "Arya Tayshete"}, {name="ChatGPT"}]
+requires-python = ">=3.10"
+dependencies = [
+    "typer>=0.12.0",
+    "pydantic>=2.7.0",
+    "PyYAML>=6.0.0",
+    "rich>=13.7.0",
+    "networkx>=3.3",
+    "spacy>=3.7.0",
+    "rank-bm25>=0.2.2",
+    "pypdf>=4.2.0"
+]
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.scripts]
+p2p = "prompt2pipes.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"prompt2pipes.templates" = ["*.yaml"]

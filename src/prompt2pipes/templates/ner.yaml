@@ -1,0 +1,33 @@
+nodes:
+  - id: text_source
+    component: InputText
+    outputs:
+      text: text
+  - id: nlp
+    component: SpaCyModel
+    inputs:
+      text: text
+    outputs:
+      doc: spacy.Doc
+      ents: list[tuple]
+    params:
+      model: en_core_web_sm
+  - id: print_ents
+    component: ConsolePrinter
+    inputs:
+      items: list[tuple]
+    outputs: {}
+
+edges:
+  - source: text_source
+    source_output: text
+    target: nlp
+    target_input: text
+  - source: nlp
+    source_output: ents
+    target: print_ents
+    target_input: items
+
+metadata:
+  task: ner
+  description: Minimal spaCy NER pipeline with console printing
