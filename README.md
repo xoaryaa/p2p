@@ -1,4 +1,7 @@
 # Prompt2Pipes (P2P) — Natural-Language → NLP Pipelines
+<p align="center">
+  <img src="p2p.gif" width="600" alt="Demo GIF"/>
+</p>
 
 This repo is a learning-first, hands-on scaffold to build a CLI that turns plain English specs
 into runnable NLP pipeline graphs, validates them, and executes two runners:
